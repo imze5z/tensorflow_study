@@ -50,7 +50,6 @@ def insert_ex(tb_name, sample):
     c.close()
     conn.close()
 
-
 def generate_train_data():
     tbs = []
     for j in range(10):
