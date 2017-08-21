@@ -39,8 +39,6 @@ def init_db():
     finally:
         c.close()
         conn.close()
-    return 'tb_' + str(tb_name)
-
 
 def insert_ex(tb_name, sample):
     conn = sqlite3.connect('1.1.db')
@@ -106,10 +104,8 @@ def select_shape(tb_name, shape_ex):
 
 
 def generate_train_data():
-    tbs = []
+    init_db()
     for j in range(1):
-        tb_name = init_db()
-        tbs.append(tb_name)
         for i in xrange(random.randint(10, 100)):
             shape = random.sample(['circle', 'triangle', 'square'], 1)[0]
             crust_size = random.sample(['thick', 'thin'], 1)[0]
@@ -122,7 +118,6 @@ def generate_train_data():
                             filling_shade, category)
             insert_ex(tb_name, sample)
         time.sleep(1)
-    return tbs
 
 
 if __name__ == '__main__':
