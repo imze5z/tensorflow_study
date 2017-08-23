@@ -2,8 +2,11 @@
 import sqlite3
 import random
 import time
+import sys
 
-# import pudb
+XRANGE = range
+if sys.platform.startswith('2.7'):
+    XRANGE = xrange
 
 
 class Sample(object):
@@ -39,6 +42,7 @@ def init_db():
     finally:
         c.close()
         conn.close()
+
 
 def insert_ex(tb_name, sample):
     conn = sqlite3.connect('1.1.db')
@@ -105,8 +109,8 @@ def select_shape(tb_name, shape_ex):
 
 def generate_train_data():
     init_db()
-    for j in range(1):
-        for i in xrange(random.randint(10, 100)):
+    for j in XRANGE(1):
+        for i in XRANGE(random.randint(10, 100)):
             shape = random.sample(['circle', 'triangle', 'square'], 1)[0]
             crust_size = random.sample(['thick', 'thin'], 1)[0]
             crust_shade = random.sample(['gray', 'white', 'dark'], 1)[0]
