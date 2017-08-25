@@ -1,4 +1,25 @@
 # -*- coding: utf-8 -*-
+'''
+这个程序描述了这样一件故事，Johny喜欢吃一个叫做派的东西，然后这个派有这么
+几种属性，
+
+外壳形状(shape-, circle[圆], triangle[三角形], square[矩形]),
+外壳大小(crust-size-, thick[厚], thin[薄]),
+外壳色度(crust-shade-, dark[黑], white[白], gray[灰]),
+内馅大小(filling-size-, thick[厚], thin[薄]),
+内馅色度(filling-shade-, dark[黑], white[白], gray[灰]),
+
+然后，根据我随机生成的样本, 来预测当Johny说一个外壳形状时的那个派是Johny喜欢
+的，还是他不喜欢的，喜欢的定义为pos,不喜欢的定义为neg,根据贝叶斯公式，
+当输入shape 为 circle时，P(shape=circle, cat=pos) | P(shape=circle) 即可计算出
+，在所有的外壳形状为圆形，为正类的条件概率分布。
+同理，可以计算出在所有的外壳形状为圆形时，为负类的条件概率分布。
+由于pos > neg 则可以判断，当输入shape=circle时，为Johny喜欢的派,
+否则就是Johny不喜欢的派。
+
+目前只对外壳大小进行了预测函数的编写。
+这个程序是我对贝叶斯公式的运用。确实在统计学中，这个公式很有道理。
+'''
 import sqlite3
 import random
 import time
