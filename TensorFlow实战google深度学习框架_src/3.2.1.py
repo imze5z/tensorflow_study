@@ -15,3 +15,18 @@ b = tf.constant([2.0, 3.0], name='b')
 result = tf.add(a, b, name='add')
 print(type(a))
 print(result)
+
+# method 1
+sess = tf.Session()
+with sess.as_default():
+    print(result.eval())
+
+# method 2
+sess = tf.Session()
+sess.run(result)
+print(result.eval(session=sess))
+
+# method 3 
+meses = tf.InteractiveSession()
+print(result.eval())
+ses.close()
