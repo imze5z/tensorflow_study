@@ -141,8 +141,8 @@ def select_crust_size(tb_name, crust_size_ex):
     pos_crust_size = float(result[0])
 
     crust_size = ("select count(*) as crust_size from %s where crust_size='%s'" % (tb_name,
-                                                                    crust_size))
-    c.execute(shape)
+                                                                    crust_size_ex))
+    c.execute(crust_size)
     result = c.fetchone()
     crust_size = float(result[0])
 
