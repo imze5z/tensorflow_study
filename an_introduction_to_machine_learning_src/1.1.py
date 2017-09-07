@@ -107,7 +107,7 @@ def select_shape(tb_name, shape_ex):
     pos_shape__shape = pos_shape / shape
     print('input: shape=%s' % shape_ex)
     print('P(pos * shape=%s) / P(shape=%s) = %f' % (pos_shape, shape,
-                                                  pos_shape__shape))
+                                                    pos_shape__shape))
 
     neg_shape = ("select count(*) as neg_shape from %s where shape='%s' and"
                  " category='neg'" % (tb_name, shape_ex))
@@ -118,7 +118,7 @@ def select_shape(tb_name, shape_ex):
     # 2
     neg_shape__shape = neg_shape / shape
     print('P(neg * shape=%s) / P(shape=%s) = %f' % (neg_shape, shape,
-                                                  neg_shape__shape))
+                                                    neg_shape__shape))
 
     c.close()
     conn.close()
@@ -128,20 +128,22 @@ def select_shape(tb_name, shape_ex):
     else:
         return 'neg'
 
+
 def select_crust_size(tb_name, crust_size_ex):
     '''外壳大小的预测函数
     '''
     # pudb.set_trace()
     conn = sqlite3.connect('1.1.db')
     c = conn.cursor()
-    pos_crust_size = ("select count(*) as pos_crust_size from %s where shape='%s' and "
-                 "category='pos'" % (tb_name, crust_size_ex))
+    pos_crust_size = (
+        "select count(*) as pos_crust_size from %s where crust_size='%s' and "
+        "category='pos'" % (tb_name, crust_size_ex))
     c.execute(pos_crust_size)
     result = c.fetchone()
     pos_crust_size = float(result[0])
 
-    crust_size = ("select count(*) as crust_size from %s where crust_size='%s'" % (tb_name,
-                                                                    crust_size_ex))
+    crust_size = ("select count(*) as crust_size from %s where crust_size='%s'"
+                  % (tb_name, crust_size_ex))
     c.execute(crust_size)
     result = c.fetchone()
     crust_size = float(result[0])
@@ -150,19 +152,20 @@ def select_crust_size(tb_name, crust_size_ex):
     # 条件概率P(pos|crust_size)
     pos_crust_size__crust_size = pos_crust_size / crust_size
     print('input: crust_size=%s' % crust_size_ex)
-    print('P(pos * crust_size=%s) / P(crust_size=%s) = %f' % (pos_crust_size, crust_size,
-                                                  pos_crust_size__crust_size))
+    print('P(pos * crust_size=%s) / P(crust_size=%s) = %f' %
+          (pos_crust_size, crust_size, pos_crust_size__crust_size))
 
-    neg_crust_size = ("select count(*) as neg_crust_size from %s where crust_size='%s' and"
-                 " category='neg'" % (tb_name, crust_size_ex))
+    neg_crust_size = (
+        "select count(*) as neg_crust_size from %s where crust_size='%s' and"
+        " category='neg'" % (tb_name, crust_size_ex))
     c.execute(neg_crust_size)
     result = c.fetchone()
     neg_crust_size = float(result[0])
 
     # 2
     neg_crust_size__crust_size = neg_crust_size / crust_size
-    print('P(neg * crust_size=%s) / P(crust_size=%s) = %f' % (neg_crust_size, crust_size,
-                                                  neg_crust_size__crust_size))
+    print('P(neg * crust_size=%s) / P(crust_size=%s) = %f' %
+          (neg_crust_size, crust_size, neg_crust_size__crust_size))
 
     c.close()
     conn.close()
@@ -171,6 +174,7 @@ def select_crust_size(tb_name, crust_size_ex):
         return 'pos'
     else:
         return 'neg'
+
 
 def generate_train_data():
     init_db()
