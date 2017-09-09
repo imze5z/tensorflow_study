@@ -16,8 +16,6 @@
 同理，可以计算出在所有的外壳形状为圆形时，为负类的条件概率分布。
 由于pos > neg 则可以判断，当输入shape=circle时，为Johny喜欢的派,
 否则就是Johny不喜欢的派。
-
-这个程序是我对贝叶斯公式的运用。确实在统计学中，这个公式很有道理。
 '''
 import sqlite3
 import random
@@ -30,6 +28,7 @@ if sys.platform.startswith('2.7'):
 
 
 class Sample(object):
+    ''''''
     def __init__(self, shape, crust_size, crust_shade, filling_size,
                  filling_shade, category):
         self.shape = shape
@@ -176,6 +175,54 @@ def select_crust_size(tb_name, crust_size_ex):
         return 'neg'
 
 
+def select_crust_shade(tb_name, crust_shade_ex):
+    '''外壳色度的预测函数
+    '''
+    conn = sqlite3.connect('1.1.db')
+    c = conn.cursor()
+    # 查询外壳色度为正类的个数
+    pos_crust_shade = (
+        "select count(*) as pos_crust_shade from %s where crust_shade='%s' and "
+        "category='pos'" % (tb_name, crust_shade_ex))
+    c.execute(pos_crust_shade)
+    result = c.fetchone()
+    pos_crust_shade = float(result[0])
+
+    # 查询外壳色度的个数
+    crust_shade = ("select count(*) as crust_shade from %s where crust_shade='%s'"
+                  % (tb_name, crust_shade_ex))
+    c.execute(crust_shade)
+    result = c.fetchone()
+    crust_shade = float(result[0])
+
+    # 1
+    # 条件概率P(pos|crust_size)
+    pos_crust_shade__crust_shade = pos_crust_shade / crust_shade
+    print('input: crust_shade=%s' % crust_shade_ex)
+    print('P(pos * crust_shade=%s) / P(crust_shade=%s) = %f' %
+          (pos_crust_shade, crust_shade, pos_crust_shade__crust_shade))
+
+    # 查询外壳色度为负类的个数
+    neg_crust_shade = (
+        "select count(*) as neg_crust_shade from %s where crust_shade='%s' and"
+        " category='neg'" % (tb_name, crust_shade_ex))
+    c.execute(neg_crust_shade)
+    result = c.fetchone()
+    neg_crust_shade = float(result[0])
+
+    # 2
+    neg_crust_shade__crust_shade = neg_crust_shade / crust_shade
+    print('P(neg * crust_shade=%s) / P(crust_shade=%s) = %f' %
+          (neg_crust_shade, crust_shade, neg_crust_shade__crust_shade))
+
+    c.close()
+    conn.close()
+    print('output:')
+    if pos_crust_shade__crust_shade > neg_crust_shade__crust_shade:
+        return 'pos'
+    else:
+        return 'neg'
+
 def generate_train_data():
     init_db()
     for j in XRANGE(1):
@@ -198,3 +245,4 @@ if __name__ == '__main__':
     generate_train_data()
     print(select_shape(tb_name, 'circle'))
     print(select_crust_size(tb_name, 'thick'))
+    print(select_crust_shade(tb_name, 'gray'))
